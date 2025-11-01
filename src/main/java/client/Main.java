@@ -2,24 +2,40 @@ package client;
 
 import builder.*;
 import domain.Car;
-import factory.CarFactory;
 import singleton.Logger;
 
 public class Main {
     public static void main(String[] args) {
         Logger logger = Logger.getInstance();
+        Director director = new Director();
 
-        // --- Builder Pattern ---
-        CarBuilder builder = new SportCarBuilder();
-        Director director = new Director(builder);
-        Car sportsCar = director.constructSportsCar();
-        logger.log("Built via Builder: " + sportsCar);
+        try {
+            // Sedan
+            CarBuilder sedanBuilder = new SedanCarBuilder();
+            director.setBuilder(sedanBuilder);
+            Car sedan = director.constructCar();
+            logger.log("Built Sedan: " + sedan);
 
-        // --- Factory Method ---
-        Car sedan = CarFactory.createCar("sedan");
-        logger.log("Built via Factory: " + sedan);
+            // SUV
+            CarBuilder suvBuilder = new SUVCarBuilder();
+            director.setBuilder(suvBuilder);
+            Car suv = director.constructCar();
+            logger.log("Built SUV: " + suv);
 
-        Car truck = CarFactory.createCar("truck");
-        logger.log("Built via Factory: " + truck);
+            // Truck
+            CarBuilder truckBuilder = new TruckCarBuilder();
+            director.setBuilder(truckBuilder);
+            Car truck = director.constructCar();
+            logger.log("Built Truck: " + truck);
+
+            // Simulate an error intentionally
+            CarBuilder badBuilder = null;
+            director.setBuilder(badBuilder);  // ⚠️ This will cause a NullPointerException
+            Car badCar = director.constructCar();
+            logger.log("Built Bad Car: " + badCar);
+
+        } catch (Exception e) {
+            logger.error("Error occurred while building a car: " + e.getMessage());
+        }
     }
 }

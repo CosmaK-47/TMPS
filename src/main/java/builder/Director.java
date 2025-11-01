@@ -5,20 +5,18 @@ import domain.Car;
 public class Director {
     private CarBuilder builder;
 
-    public Director(CarBuilder builder) {
-        this.builder = builder;
-    }
-
     public void setBuilder(CarBuilder builder) {
         this.builder = builder;
     }
 
-    public Car constructSportsCar() {
+    public Car constructCar() {
+        builder.reset();
         builder.buildMake();
         builder.buildModel();
-        builder.buildType();
-        builder.buildHorsepower();
         builder.buildSeats();
+        builder.buildEngine();
+        builder.buildTripComputer();
+        builder.buildGPS();
         return builder.getResult();
     }
 }
